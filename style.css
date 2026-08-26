@@ -1,0 +1,584 @@
+/* ─── Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --bg:        #0d0e1a;
+  --surface:   #161828;
+  --surface2:  #1e2038;
+  --text:      #e8e4d9;
+  --text-muted:#9a9585;
+  --accent:    #8b7ca8;
+  --gold:      #c4a882;
+  --gold-dim:  #8c7355;
+  --rule:      rgba(196, 168, 130, 0.2);
+  --font-serif: 'IM Fell English', 'Georgia', serif;
+  --font-body:  'Source Sans 3', 'Helvetica Neue', sans-serif;
+  --max-w: 1120px;
+  --radius: 2px;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; text-decoration-color: var(--gold-dim); }
+
+/* ─── Grain texture overlay ──────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* ─── Navigation ─────────────────────────────────────────────────────────── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(13,14,26,0.95) 0%, rgba(13,14,26,0) 100%);
+  backdrop-filter: blur(0px);
+  transition: background 0.3s, backdrop-filter 0.3s;
+}
+.site-nav.scrolled {
+  background: rgba(13,14,26,0.92);
+  backdrop-filter: blur(8px);
+}
+.nav-logo {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+.nav-links a {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* ─── Hero ───────────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 6rem 2rem 4rem;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  transform: scale(1.05);
+  will-change: transform;
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(13,14,26,0.7) 100%),
+    linear-gradient(to bottom, rgba(13,14,26,0.3) 0%, rgba(13,14,26,0.8) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+}
+.hero-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--gold-dim);
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 40px rgba(13,14,26,0.8);
+}
+.hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: scroll-hint 2s ease-in-out infinite;
+}
+.hero-scroll svg { width: 16px; height: 16px; }
+@keyframes scroll-hint {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 0.9; transform: translateX(-50%) translateY(4px); }
+}
+
+/* ─── Ornament / divider ─────────────────────────────────────────────────── */
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  color: var(--gold-dim);
+}
+.ornament-line {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+  max-width: 200px;
+}
+.ornament-glyph {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: var(--gold-dim);
+}
+
+/* ─── Layout helpers ─────────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.section {
+  padding: 5rem 0;
+}
+.section + .section {
+  border-top: 1px solid var(--rule);
+}
+
+/* ─── Section headings ───────────────────────────────────────────────────── */
+.section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.section-intro {
+  color: var(--text-muted);
+  max-width: 52ch;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+
+/* ─── Territory cards ────────────────────────────────────────────────────── */
+.territory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2px;
+}
+.territory-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  cursor: pointer;
+  display: block;
+  color: inherit;
+}
+.territory-card:hover { text-decoration: none; }
+.territory-card img {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  transition: transform 0.6s ease, opacity 0.4s;
+  opacity: 0.75;
+}
+.territory-card:hover img {
+  transform: scale(1.04);
+  opacity: 0.9;
+}
+.territory-card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+.territory-card-class {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.territory-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.territory-card-excerpt {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+.territory-card-footer {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.territory-card-footer::after {
+  content: '→';
+  transition: transform 0.2s;
+}
+.territory-card:hover .territory-card-footer::after {
+  transform: translateX(4px);
+}
+
+/* ─── Full territory entry (atlas page) ─────────────────────────────────── */
+.territory-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--surface);
+  margin-bottom: 2px;
+}
+.territory-entry:nth-child(even) {
+  direction: rtl;
+}
+.territory-entry:nth-child(even) > * {
+  direction: ltr;
+}
+.territory-entry-image {
+  overflow: hidden;
+}
+.territory-entry-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.8;
+  transition: opacity 0.4s;
+}
+.territory-entry:hover .territory-entry-image img { opacity: 0.95; }
+.territory-entry-body {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.territory-entry-code {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.territory-entry-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-style: italic;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+.territory-entry-lat {
+  font-size: 0.72rem;
+  color: var(--gold-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+.territory-entry-desc {
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+.territory-entry-desc + .territory-entry-desc { margin-top: 0.8rem; }
+.territory-entry-tags {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tag {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── Field notes page ───────────────────────────────────────────────────── */
+.fieldnotes-hero {
+  position: relative;
+  height: 40vh;
+  min-height: 260px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 3rem 2rem;
+}
+.fieldnotes-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+.fieldnotes-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,14,26,1) 0%, rgba(13,14,26,0.3) 100%);
+}
+.fieldnotes-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  width: 100%;
+}
+.notes-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 4rem;
+}
+.notes-sidebar {
+  position: sticky;
+  top: 5rem;
+  align-self: start;
+}
+.notes-toc {
+  list-style: none;
+  border-left: 1px solid var(--rule);
+  padding-left: 1.25rem;
+}
+.notes-toc li + li { margin-top: 0.6rem; }
+.notes-toc a {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.notes-toc a:hover, .notes-toc a.active {
+  color: var(--gold);
+  text-decoration: none;
+}
+.notes-toc-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.notes-body h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-style: italic;
+  color: var(--text);
+  margin: 3.5rem 0 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+.notes-body h2:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+.notes-body h3 {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin: 2rem 0 0.5rem;
+}
+.notes-body p {
+  color: var(--text-muted);
+  line-height: 1.85;
+  margin-bottom: 1rem;
+  max-width: 68ch;
+}
+.notes-body p strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.callout {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.callout p {
+  margin: 0;
+  font-style: italic;
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+}
+.classification-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.88rem;
+}
+.classification-table th {
+  text-align: left;
+  padding: 0.6rem 1rem;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+.classification-table td {
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(196,168,130,0.07);
+  vertical-align: top;
+}
+.classification-table tr:last-child td { border-bottom: none; }
+.classification-table td:first-child {
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* ─── CTA / button ───────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+  border-radius: var(--radius);
+}
+.btn:hover {
+  background: var(--gold);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+}
+.site-footer a { color: var(--text-muted); }
+.site-footer a:hover { color: var(--gold); }
+
+/* ─── Featured strip (homepage) ─────────────────────────────────────────── */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px;
+}
+
+/* ─── Atlas page header ──────────────────────────────────────────────────── */
+.page-header {
+  padding: 9rem 2rem 4rem;
+  text-align: center;
+}
+.page-header .section-label { justify-content: center; display: flex; }
+.page-header .section-title { font-size: clamp(2.2rem, 5vw, 4rem); }
+.page-header .section-intro {
+  margin: 1rem auto 0;
+  text-align: center;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .territory-entry {
+    grid-template-columns: 1fr;
+  }
+  .territory-entry:nth-child(even) { direction: ltr; }
+  .territory-entry-image { height: 220px; }
+  .territory-entry-body { padding: 1.75rem; }
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+  .notes-sidebar {
+    position: static;
+    display: none;
+  }
+  .nav-links { gap: 1.2rem; }
+}
+@media (max-width: 520px) {
+  .nav-links li:not(:last-child):not(:nth-last-child(2)) { display: none; }
+  .hero-title { font-size: 2.4rem; }
+}
