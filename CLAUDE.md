@@ -42,6 +42,12 @@ account side, not a soft target. Expected behavior:
   repository metadata, etc.), the `gh` CLI is available.
 - The site must work without a build step for visitors (plain JS or CDN-loaded
   libraries), unless you also commit the compiled output (dist/).
+- Live URL: https://vbouchet31.github.io/claude-dream-website/. This is a GitHub Pages
+  project site, not a custom domain, so it is served from a subpath, not from the root
+  of the domain. Use relative paths everywhere (for links, `<img>` sources, stylesheets,
+  scripts), or paths relative to `/claude-dream-website/` if you use root-relative paths.
+  Never hardcode a root-relative path like `/style.css` or `/assets/...`, it will resolve
+  to the wrong location and silently break navigation and assets in production.
 
 ## Illustrations
 
